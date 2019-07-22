@@ -1,0 +1,385 @@
+\section{models}
+\subsection{Speech\_API}
+    ASER\_system est la fonction principale de ce module qui contient un système de reconnaissance de la parole pour la langue arabe, ce dernier peut être intégré à n'importe quelle application. 
+    
+\subsection{Apprentissage}
+    \subsubsection{encoder\_decoder}
+    Nous commençons par vous présentez 4 types d'encodeurs :
+    \begin{enumerate}
+        \item \textbf{Encodeur LSTM :} 
+            \begin{tcolorbox}
+                get\_encoder\_states\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un encodeur avec une couche LSTM \\
+        \item \textbf{Encodeur GRU :} 
+            \begin{tcolorbox}
+            get\_encoder\_states\_GRU(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un encodeur avec une couche GRU \\
+        \item \textbf{Encodeur Bi-LSTM :}
+            \begin{tcolorbox}
+            encoder\_bi\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un encodeur avec une couche LSTM  bidirectionnelle \\
+        \item \textbf{Encodeur Bi-GRU :}
+            \begin{tcolorbox}
+            encoder\_bi\_GRU(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un encodeur avec un couche GRU bidirectionnelle \\
+    \end{enumerate}
+    Toutes ces fonctions ont les mêmes arguments en entrée et renvoie la même chose en sortie. \\
+    \textbf{Arguments} 
+    \begin{itemize}
+        \item encoder\_inputs : 3D Numpy Array, les données en entrèe pour l'encodeur.
+        \item latent\_dim : Entier positif, dimensionnalité de l'espace de sortie.
+        \item return\_sequences=False : Booléen. Indique s'il faut renvoyer la dernière sortie de la séquence de sortie ou la séquence complète du LSTM.
+    \end{itemize}
+    \textbf{Retourne} 
+    \begin{itemize}
+        \item encoder\_states : le vecteur d'états cachés renvoyé par la couche LSTM
+    \end{itemize}  
+    Dans ce qui suit, nous présentons 4 types de décodeurs :
+    \begin{enumerate}
+        \item \textbf{Décodeur LSTM :} 
+            \begin{tcolorbox}
+            get\_decoder\_outputs\_LSTM( encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un décodeur avec trois couches LSTM  \\
+        \item \textbf{Décodeur GRU :}  
+            \begin{tcolorbox}
+            get\_decoder\_outputs\_GRU(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un décodeur avec trois couches GRU \\
+        \item \textbf{Décodeur Bi-LSTM :}  
+            \begin{tcolorbox}
+            decoder\_for\_bidirectionnal\_encoder\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Fonction implémentant un décodeur avec trois couches LSTM bidirectionnelles \\
+        \item \textbf{Décodeur Bi-GRU :} 
+            \begin{tcolorbox}
+            decoder\_for\_bidirectionnal\_encoder\_GRU(encoder\_states, decoder\_inputs, latent\_dim)
+            \end{tcolorbox} 
+            Fonction implémentant un décodeur avec trois couches GRU bidirectionnelles \\
+    \end{enumerate}
+    Toutes ces fonctions ont les mêmes arguments en entrée et renvoie la même chose en sortie.\\
+        \textbf{Arguments} \\
+        \begin{itemize}
+            \item encoder\_inputs : 3D Numpy Array, les données en entrèe pour l'encodeur.
+            \item decoder\_inputs : 3D Numpy Array. Les données en entrée du décodeur
+            \item latent\_dim : Entier positif, dimensionnalité de l'espace de sortie.
+        \end{itemize}
+        \textbf{Retourne}
+        \begin{itemize}
+            \item decoder\_states : le vecteur d'états cachés renvoyé par la couche LSTM
+            \item decoder\_outputs : 3D Numpy array. Représente le résultat obtenu par le décodeur
+        \end{itemize}
+    
+    
+    \subsubsection{baseline\_model}
+    \begin{enumerate}
+        \item \textbf{Modèle Baseline en utilisant des couches GRU} 
+            \begin{tcolorbox}
+                train\_baseline\_seq2seq\_model\_GRU(mfcc\_features, target\_length, latent\_dim, word\_level)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches GRU pour l'encodeur ainsi que le décodeur \\
+        \item \textbf{Modèle Baseline en utilisant des couches GRU bidirectionnelles}
+            \begin{tcolorbox}
+            train\_bidirectional\_baseline\_seq2seq\_model\_GRU(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches GRU bidirectionnelles pour l'encodeur ainsi que le décodeur \\
+        \item \textbf{Modèle Baseline en utilisant des couches LSTM} 
+            \begin{tcolorbox}
+            train\_baseline\_seq2seq\_model\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches LSTM pour l'encodeur ainsi que le décodeur \\
+        \item \textbf{Modèle Baseline en utilisant des couches LSTM  bidirectionnelles} 
+            \begin{tcolorbox}
+            train\_bidirectional\_baseline\_seq2seq\_model\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches LSTM bidirectionnelles pour l'encodeur ainsi que le décodeur \\
+            \textbf{Arguments} 
+            \begin{itemize}
+                \item mfcc\_features : 3D Numpy Array
+                \item target\_length : Entier positif, taille de l'output du décodeur
+                \item latent\_dim : Entier positif, dimensionnalité de l'espace de sortie.
+                \item word\_level : Booléen, 0 si les transcriptions sont basées caractères, 1 sinon.
+            \end{itemize}
+            \textbf{Retourne} 
+            \begin{itemize}
+                \item model : Définit une instance de model séquence à séquence 
+                \item encoder\_states : le vecteur d'états cachés renvoyé par la couche LSTM
+            \end{itemize}
+    \end{enumerate}
+
+    \subsubsection{cnn\_based\_model}
+    \begin{enumerate}
+        \item \textbf{Modèle avec couche convolutionnelles et Encodeur/Décodeur avec des couches GRU}  
+            \begin{tcolorbox}
+                train\_cnn\_seq2seq\_model\_GRU(mfcc\_features, target\_length, latent\_dim, word\_level)
+            \end{tcolorbox}
+            Modèle implémenté en utilisant des couches GRU pour l'encodeur ainsi que le décodeur \\
+        \item \textbf{Modèle avec couche convolutionnelles et Encodeur/Décodeur avec des couches GRU bidirectionnelles} 
+            \begin{tcolorbox}
+            train\_bidirectional\_baseline\_seq2seq\_model\_GRU(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches GRU bidirectionnelles pour l'encodeur ainsi que le décodeur \\
+        \item \textbf{Modèle avec couche convolutionnelles et Encodeur/Décodeur avec des couches LSTM} 
+            \begin{tcolorbox}
+            train\_baseline\_seq2seq\_model\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches LSTM pour l'encodeur ainsi que le décodeur \\
+        \item \textbf{Modèle avec couche convolutionnelles et Encodeur/Décodeur avec des couches LSTM  bidirectionnelles}
+            \begin{tcolorbox}
+            train\_bidirectional\_baseline\_seq2seq\_model\_LSTM(encoder\_inputs, latent\_dim, return\_sequences=False)
+            \end{tcolorbox}
+            Modèle de base implémenté en utilisant des couches LSTM bidirectionnelles pour l'encodeur ainsi que le décodeur \\
+            \textbf{Arguments} 
+            \begin{itemize}
+                \item mfcc\_features : 3D Numpy Array
+                \item target\_length : Entier positif, taille de l'output du décodeur
+                \item latent\_dim : Entier positif, dimensionnalité de l'espace de sortie.
+                \item word\_level : Booléen, 0 si les transcriptions sont basées caractères, 1 sinon.
+            \end{itemize}
+            \textbf{Retourne} 
+            \begin{itemize}
+                \item model : Définit une instance de model séquence à séquence 
+                \item encoder\_states : le vecteur d'états cachés renvoyé par la couche LSTM
+            \end{itemize}
+    \end{enumerate}
+    
+    
+    \subsubsection{model\_callback}
+    \begin{tcolorbox}
+    ModelSaver(model\_name, model\_path, encoder\_states, drive\_instance, word\_level=True, output\_length=16)
+    \end{tcolorbox}
+    Classe permettant de sauvegarder le modèle après cheque itération lors de l'apprentissage \\
+    \textbf{Arguments} 
+    \begin{itemize}
+        \item model\_name : chaine de caratères, le nom du modèle.
+        \item model\_path : chaine de caratères, le chemin vers le modèle.
+        \item encoder\_states
+        \item word\_level : Booléen, 0 si les transcriptions sont basées caractères, 1 sinon.
+        \item output\_length : entier positif, taille de l'output.
+    \end{itemize}
+    \textbf{Méthodes}
+    \begin{itemize}
+        \item on\_epoch\_end(epoch, logs=None)
+    \end{itemize}
+    
+    \subsubsection{train\_model}
+    \begin{tcolorbox}
+    Seq2SeqModel(latent\_dim=300, epochs=50, model\_architecture=5, data\_generation=True, word\_level=False)
+    \end{tcolorbox}
+    Classe permettant de faire le traitement nécessaire pour l'apprentissage d'un modèle seéquence à séquence.\\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item latent\_dim : entier positif, 
+        \item epochs : entier positif, 
+        \item model\_architecture : entier positif
+        \item data\_generation : Booléen, 
+        \item word\_level : Booléen, 0 si les transcriptions sont basées caractères, 1 sinon.
+    \end{itemize}
+    \textbf{Méthodes}
+    \begin{itemize}
+        \item test\_model()
+        \item train\_model()
+        \item validation\_generator()
+        \item split\_data\_generator\_dict\_test()
+        \item split\_data\_generator\_dict(batch\_size)
+        \item split\_data\_generator\_dict\_word\_level(batch\_size)
+        \item split\_data\_generator\_dict\_word\_level\_test()
+        \item get\_test\_data(audio\_file, transcripts\_file)
+        \item get\_data(audio\_file, transcripts\_file)
+    \end{itemize}
+    
+    % \subsubsection{test\_model}
+    
+    \subsubsection{plot\_performance}
+    \begin{tcolorbox}
+    plot\_train\_loss\_acc(model\_hist\_path, word\_level)
+    \end{tcolorbox}
+    Fonction permettant d'afficher les courbes d'appentissage et de test (loss et accuracy) \\
+    \textbf{Arguments} 
+    \begin{itemize}
+        \item model\_hist\_path : le chemin vers l'historique du modèle
+        \item word\_level : Booléen, 0 si les transcriptions sont basées caractères, 1 sinon.
+    \end{itemize}
+
+    
+    \subsubsection{char\_inference}
+    \begin{tcolorbox}
+    Char\_Inference()
+    \end{tcolorbox}
+    Fonction permeettant l'inférence en utilisant un modèle basé caractères. \\
+    \subsubsection{word\_inference}
+    \begin{tcolorbox}
+    Word\_Inference(model\_path, latent\_dim)
+    \end{tcolorbox}
+    Fonction permeettant l'inférence en utilisant un modèle basé mots. \\
+    \textbf{Arguments} 
+    \begin{itemize}
+        \item model\_path : chaine de caractères, chemain vers le modèle choisi.
+        \item latent\_dim : entier positif, 
+    \end{itemize}
+    
+    \subsubsection{word\_correction}
+    \begin{tcolorbox}
+    correct\_word(word\_to\_correct)
+    \end{tcolorbox}
+    Fonction permettant la correction d'un mot en utilisant un modèle de language. \\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item word\_to\_correct : chaine de caractères, le mot à corriger.
+    \end{itemize}
+    
+
+\section{data}
+    \subsection{Dataset generation}
+    \subsubsection{audio\_transcript\_map}
+    \begin{tcolorbox}
+    map\_audio\_transcripts()
+    \end{tcolorbox}
+    Fonction permettant de mapper chaque audio avec sa transcription.
+    \subsubsection{parse\_xml}
+    \begin{tcolorbox}
+    generate\_transcriptions\_file(transcriptions\_desc, output\_path)
+    \end{tcolorbox}
+    Fonction permettant la génération d'un fichier des transcriptions à partir d'un XML \\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item transcriptions\_desc
+        \item output\_path
+    \end{itemize}
+    
+    \subsubsection{split\_audio}
+    \begin{tcolorbox}
+    split\_audio(audio\_entry, transcriptions\_desc, audio\_output\_dir)
+    \end{tcolorbox}
+    Fonction permettant de diviser un audio en plusieurs sous-audio. \\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item audio\_entry
+        \item transcriptions\_desc
+        \item audio\_output\_dir
+    \end{itemize}
+    \subsubsection{parse\_dataset}
+    \begin{tcolorbox}
+    generate\_dataset()
+    \end{tcolorbox}
+    Fonction permettant la génération d'un fichier Pickle contenant toutes les informations nécessaire et les données du dataset 
+    
+    \subsection{pré-traitement des données}
+    \subsubsection{normalisation}
+    \begin{tcolorbox}
+    normalize\_encoder\_input(dataset)
+    \end{tcolorbox}
+    Fonction permettant la normalisation des entrés de l'encodeur \\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item dataset
+    \end{itemize}
+    % \subsubsection{clean\_audio}
+    \subsubsection{transcript\_preprocessing}
+    \begin{tcolorbox}
+    transcript\_preprocessing(transcription, special\_characters\_table)
+    \end{tcolorbox}
+    Fonction permettant de faire le pré-traitement des transcriptions \\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item transcription
+        \item special\_characters\_table
+    \end{itemize}
+    % \subsubsection{transcript\_content}
+    % \subsubsection{transcript\_encoding}
+    % \subsubsection{prepare\_dataset}
+\section{lib}
+    \subsection{AudioInput}
+    \begin{tcolorbox}
+    AudioInput(path, transcript)
+    \end{tcolorbox}
+    Classe permettant de représenter un audio, ses caractéristiques ainsi que sa transcription \\
+    \textbf{Arguments}
+    \begin{itemize}
+        \item path
+        \item transcript
+    \end{itemize}
+    \subsection{Transcript}
+    \begin{tcolorbox}
+    Transcript(start\_time, end\_time, content)
+    \end{tcolorbox}
+    \textbf{Arguments}
+    \begin{itemize}
+        \item start\_time
+        \item end\_time
+        \item content
+    \end{itemize}
+\section{utils}
+    \subsection{character\_convesion}
+    \begin{enumerate}
+        \item Conversion d'une phrase de la langue arabe au buckwalter :
+        \begin{tcolorbox}
+        arabic\_to\_buckwalter(arabic\_sentence)
+        \end{tcolorbox}
+        \textbf{Arguments}
+        \begin{itemize}
+            \item arabic\_sentence
+        \end{itemize}
+        \item Conversion d'une phrase du buckwalter à l'arabe:
+        \begin{tcolorbox}
+        buckwalter\_to\_arabic(buckwalter\_sentence)
+        \end{tcolorbox}
+        \textbf{Arguments}
+        \begin{itemize}
+            \item buckwalter\_sentence
+        \end{itemize}
+        \item Conversion des chiffres en lettres :
+        \begin{tcolorbox}
+        convert\_numeral\_to\_written\_number(number)
+        \end{tcolorbox}
+        \textbf{Arguments}
+        \begin{itemize}
+            \item number
+        \end{itemize}
+        \item Conversion ...
+        \begin{tcolorbox}
+        numerical\_to\_written\_numbers\_table(inf\_number=0, sup\_number=10001)
+        \end{tcolorbox}
+        \textbf{Arguments}
+        \begin{itemize}
+            \item inf\_number=0
+            \item sup\_number=10001
+        \end{itemize}
+    \end{enumerate}
+
+    \subsection{pickle\_management}
+    \begin{tcolorbox}
+    generate\_pickle\_dataset(threshold)
+    \end{tcolorbox}
+    \textbf{Arguments}
+    \begin{itemize}
+        \item threshold
+    \end{itemize}
+    % \subsection{utils}
+\section{etc}
+    Toutes les constantes sont enregistrées dans settings, nous retrouvant :
+    \begin{itemize}
+        \item DATA\_PATH : Chemin vers le dossier \textit{data}.
+        \item PICKLE\_FILE\_PATH : Chemin vers le fichier pickle.
+        \item PICKLE\_PARTITIONS\_PATH : Chemin vers le dossier \textit{partitions}.
+        \item PICKLE\_PAD\_FILE\_PATH 
+        \item GENERATED\_DATA\_PATH : Chemin vers le dossier generated\_data.
+        \item GENERATED\_DATA\_WAV\_PATH : Chemin vers le dossier wav de generated\_data.
+        \item GENERATED\_DATA\_TRANSCRIPTS\_PATH : Chemin vers le dossier transcripts de generated\_data.
+        \item DISTINCT\_CHARACTERS\_PATH : Chemin vers le fichier contenant les caractères distincts du corpus.
+        \item NORMALIZATION\_PATH : Chemin vers le dossier \textit{normalisation}
+        \item TRAINED\_MODELS\_PATH : Chemin vers le dossier \textit{trained\_models}
+        \item DATASET\_SPLIT\_PATH : Chemin vers le dossier \textit{dataset\_split}
+        \item DATASET\_SPLIT\_TRAIN\_PATH : Chemin vers le dossier \textit{train } de \textit{dataset\_split}
+        \item DATASET\_SPLIT\_TEST\_PATH : Chemin vers le dossier \textit{test} de \textit{dataset\_split}
+        \item MFCC\_FEATURES\_LENGTH 
+        \item CHARACTER\_SET : Ensemble de caractères du corpus.
+        \item WORD\_SET : Ensemble des mots du corpus.
+        \item LONGEST\_WORD\_LENGTH : Taille du plus grand mot.
+        \item WORD\_TARGET\_LENGTH 
+        \item TOTAL\_SAMPLES\_NUMBER
+    \end{itemize}

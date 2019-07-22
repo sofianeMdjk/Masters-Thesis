@@ -1,12 +1,15 @@
-
 \documentclass[12pt]{report}
 \usepackage[Glenn]{fncychap}
 \usepackage[T1]{fontenc}
+%\usepackage[french]{babel}
 \usepackage[francais]{babel}
+\usepackage{breakcites}
+\usepackage{slashbox}
 %\usepackage{fontspec}
 \usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{soul}
+\usepackage{url}
 \usepackage[colorlinks=true, linkcolor=black, urlcolor=black, citecolor=black]{hyperref}
 % \usepackage[hyphens, spaces, obeyspaces]{url}
 \usepackage[a4paper, width=150mm, top=25mm, bottom=25mm]{geometry}
@@ -14,7 +17,9 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{listings}
+\usepackage{placeins}
 \usepackage{float}
+\restylefloat{table}
 \usepackage[final]{pdfpages}
 \usepackage{xcolor}
 \usepackage{tocbibind}
@@ -30,8 +35,8 @@
 \usepackage{moreverb}
 \usepackage{xcolor}
 \usepackage{framed}
-\usepackage{arabluatex}
 \usepackage[algo2e, french, onelanguage, ruled]{algorithm2e}
+\usepackage{titling}
 \setlist[itemize]{label=\textbullet}
 \usepackage{fancyhdr}
 \pagestyle{fancy}   
@@ -44,12 +49,36 @@
 \newcommand{\code}[1]{\colorbox{light-gray}{\texttt{#1}}}
 \usepackage{listings}
 \usepackage{multirow}
+\usepackage{makecell}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+\usepackage[dvipsnames]{xcolor}
+\setlength{\textfloatsep}{0.1cm}
+\usepackage{tcolorbox}
+\usepackage{tablefootnote}
 
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+%\setcounter{tocdepth=3}{3n}
+%\setcounter{secnumdepth}{4}
+\usepackage[utf8x]{inputenc}
+\usepackage{arabtex}
+\usepackage{utf8}
+\usepackage{pifont}
+\setcode{utf8}
+\addto{\captionsfrench}{\renewcommand{\abstractname}{\RL{ملخص}}}
 \usepackage{array}
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
-
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\usepackage{longtable}
 \lstdefinestyle{code}{
 language=python,                   
 keywordstyle=\color{blue},      
@@ -80,7 +109,9 @@ frame=leftline,
 framerule=2pt,
 }
 
-
+\usepackage{color, colortbl}
+\definecolor{Gray}{gray}{0.6}
+\newcommand{\ie}{\textit{i}.\textit{e}., }
 %~~~BEGIN~~~%
 \begin{document}
 
@@ -88,13 +119,15 @@ framerule=2pt,
 \setlength{\parindent}{0.5cm}
 
 %%% Cover Page %%%
-\includepdf[pages=1]{cover.pdf} 
+\includepdf[pages=1]{other/cover.pdf} 
 
 %%% Content tables %%% 
 \pagenumbering{gobble}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
 \renewcommand{\contentsname}{Sommaire}
 \tableofcontents
 \clearpage
+
 
 \listoffigures
 \clearpage
@@ -102,23 +135,52 @@ framerule=2pt,
 \listoftables
 \clearpage
 
-\listofalgorithmes
+ \listofalgorithmes
 \clearpage
 
-%%% NO-plagiat declaration %%%
+\includepdf[pages=1]{other/declaration_plagiat.pdf}
+\input{chapters/remerciement.tex}
+\input{chapters/Sdedicaces.tex}
+\input{chapters/Ydedicaces.tex}
 \newpage    
 
 %%% Chapters %%%
-\pagenumbering{arabic} 
-\chapter{Automatic Speech Processing (temp title)}
-\input{chapters/chapter1}    
+\pagenumbering{arabic}
+
+% \chapter*{Introduction Générale}
+\input{chapters/introduction.tex}
+
+\chapter{Systèmes de reconnaissance de la parole et application aux systèmes de questions-réponses}
+ \input{chapters/chapter1}    
+
+\chapter{Travaux sur les systèmes de reconnaissance de la parole}
+\input{chapters/chapter2}
+
+\chapter{Conception de ASeR-System}
+ \input{chapters/chapter3}
+
+\chapter{Réalisation de ASeR-System}
+\input{chapters/chapter4}
+
+\input{chapters/Conclusion.tex}
+
+
+
 
 
 %%% References %%%
-\newpage
-\pagenumbering{gobble} 
-\bibliographystyle{unsrt} 
-\bibliography{ref}
-
+ \newpage
+ \pagenumbering{gobble} 
+ \bibliographystyle{apalike} 
+ \bibliography{ref}
+ 
+  \appendix
+ \chapter{Documentation }
+ \input{Annexes/doc.tex}
+ 
+ 
+\includepdf[pages=1]{other/abstract.pdf}
+\includepdf[pages=2]{other/abstract.pdf}
+\includepdf[pages=3]{other/abstract.pdf}
 \end{document}
 %~~~END~~~%
